@@ -1,0 +1,23 @@
+{
+  "name": "jamspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamSlater/JamSpace.git"
+  },
+  "dependencies": {
+    "socket.io": "^2.0.3",
+    "express": "^4.16.2"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AdamSlater/JamSpace/issues"
+  },
+  "homepage": "https://github.com/AdamSlater/JamSpace#readme"
+}
