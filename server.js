@@ -3,13 +3,15 @@ let server = require('http').Server(app);
 let io     = require('socket.io')(server);
 
 let users = [];
+let connections = [];
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function(socket){
-    console.log('a user connected');
+    connections.push(socket);
+    console.log('Connected: %s sockets connected', connections.length);
 
     // New User
     socket.on('new user', function (user, callback) {
@@ -19,6 +21,8 @@ io.on('connection', function(socket){
         updateUsernames();
     });
 
+    socket.on('get users', updateUsernames);
+
     function updateUsernames() {
         io.sockets.emit('get users', users);
     }
@@ -27,7 +31,9 @@ io.on('connection', function(socket){
     socket.on('disconnect', function(){
         users.splice(users.indexOf(socket.username, 1));
         updateUsernames();
-        console.log('user disconnected');
+
+        connections.splice(connections.indexOf(socket), 1);
+        console.log('Disconnected: %s sockets connected', connections.length);
     });
 });
 

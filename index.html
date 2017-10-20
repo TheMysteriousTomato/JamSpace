@@ -49,6 +49,8 @@
 
         let users = document.getElementById('users');
 
+        socket.emit('get users');
+
         function createUser(e){
             e.preventDefault();
 
