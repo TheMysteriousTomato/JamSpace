@@ -60,7 +60,7 @@
             if (username.value !== '') {
                 let user = {
                   username: username.value,
-                  band: "empty"
+                  bandname: createBandInput.value
                 };
                 socket.emit('new user', user, function (isSuccess) {
                     console.log(isSuccess);
@@ -91,6 +91,17 @@
                 s += `<li>${data[i]}</li>`;
             }
             users.innerHTML = s;
+        });
+
+        socket.on('get bands', function (data) {
+            console.log(data);
+            if (data.length !== 0){
+                let s = '';
+                for (i = 0; i < data.length; i++) {
+                    s += `<option>${data[i]}</option>`;
+                }
+                joinBandInput.innerHTML = s;
+            }
         });
 
         socket.on('connectToRoom',function(roomNo) {

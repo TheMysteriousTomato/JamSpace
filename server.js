@@ -5,7 +5,7 @@ let io     = require('socket.io')(server);
 let users = [];
 let connections = [];
 
-let currentRoomNo = 0;
+let bands = [];
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
@@ -14,26 +14,44 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
-
+    console.log(users);
     // New User
     socket.on('new user', function (user, callback) {
         callback(true);
         socket.username = user.username;
+        socket.bandname = user.bandname;
         users.push(socket.username);
+
+        // Join Room
+
+        // check if room exists && number of users in room
+        if(io.nsps['/'].adapter.rooms[socket.bandname] && io.nsps['/'].adapter.rooms[socket.bandname].length > 5) {
+
+            // fail
+            callback(false);
+            return;
+
+        } else {
+
+            // join room
+            socket.join(socket.bandname);
+
+            io.sockets.in(socket.bandname).emit('connectToRoom', " "+socket.bandname);
+            bands.push(socket.bandname);
+            getBands();
+        }
         updateUsernames();
     });
 
-    // Get List of All Users
-    socket.on('get active users', function() { updateUsernames(); });
+    // Get List of All Users and Bands
+    socket.on('get active users', function() { updateUsernames();getBands(); });
+
+    function getBands() {
+        io.sockets.emit('get bands', bands);
+    }
     function updateUsernames() {
         io.sockets.emit('get users', users);
     }
-
-    //Increase currentRoomNo 5 clients are present in a room.
-    if(io.nsps['/'].adapter.rooms["room-"+currentRoomNo] && io.nsps['/'].adapter.rooms["room-"+currentRoomNo].length > 5) currentRoomNo++;
-    socket.join("room-"+currentRoomNo);
-    //Send this event to everyone in the room.
-    io.sockets.in("room-"+currentRoomNo).emit('connectToRoom', " "+currentRoomNo);
 
     // Disconnect
     socket.on('disconnect', function(){
