@@ -91,7 +91,11 @@
                 s += `<li>${data[i]}</li>`;
             }
             users.innerHTML = s;
-        })
+        });
+
+        socket.on('connectToRoom',function(roomNo) {
+            document.title = "Jam Space"+roomNo;
+        });
     </script>
 </body>
 </html>

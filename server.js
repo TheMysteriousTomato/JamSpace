@@ -5,6 +5,8 @@ let io     = require('socket.io')(server);
 let users = [];
 let connections = [];
 
+let currentRoomNo = 0;
+
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
@@ -21,11 +23,17 @@ io.on('connection', function(socket){
         updateUsernames();
     });
 
+    // Get List of All Users
     socket.on('get active users', function() { updateUsernames(); });
-
     function updateUsernames() {
         io.sockets.emit('get users', users);
     }
+
+    //Increase currentRoomNo 5 clients are present in a room.
+    if(io.nsps['/'].adapter.rooms["room-"+currentRoomNo] && io.nsps['/'].adapter.rooms["room-"+currentRoomNo].length > 5) currentRoomNo++;
+    socket.join("room-"+currentRoomNo);
+    //Send this event to everyone in the room.
+    io.sockets.in("room-"+currentRoomNo).emit('connectToRoom', " "+currentRoomNo);
 
     // Disconnect
     socket.on('disconnect', function(){
