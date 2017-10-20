@@ -47,6 +47,7 @@
         let username = document.getElementById('username');
 
         let bandSelectors = document.querySelectorAll('input[name="band-select"]');
+        let bandSelected = document.querySelector('input[name="band-select"][checked]');
         let joinBandInput = document.getElementById('join-band');
         let createBandInput = document.getElementById('create-band');
 
@@ -60,7 +61,7 @@
             if (username.value !== '') {
                 let user = {
                   username: username.value,
-                  bandname: createBandInput.value
+                  bandname: (bandSelected.id === 'join-band-radio') ? joinBandInput[joinBandInput.selectedIndex].value : createBandInput.value
                 };
                 socket.emit('new user', user, function (isSuccess) {
                     console.log(isSuccess);
@@ -74,6 +75,7 @@
 
         bandSelectors.forEach(function (radioBtn) {
             radioBtn.addEventListener('change', function (e) {
+                bandSelected = e.target;
                 if (e.target.id === 'join-band-radio') {
                     joinBandInput.disabled = false;
                     createBandInput.disabled = true;
@@ -98,7 +100,7 @@
             if (data.length !== 0){
                 let s = '';
                 for (i = 0; i < data.length; i++) {
-                    s += `<option>${data[i]}</option>`;
+                    s += `<option value="${data[i]}">${data[i]}</option>`;
                 }
                 joinBandInput.innerHTML = s;
             }
