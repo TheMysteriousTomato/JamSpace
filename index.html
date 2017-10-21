@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jam Space</title>
+</head>
+<body>
+    <form action="/" id="userForm" onsubmit="createUser(event)">
+        <label for="username">Username:</label>
+        <input id="username" type="text">
+
+        <br>
+
+        <label for="join-band-radio">Join</label><input type="radio" name="band-select" id="join-band-radio" checked>
+        <label for="create-band-radio">Create</label><input type="radio" name="band-select" id="create-band-radio">
+        <br>
+
+        <label for="join-band">Join Band:</label>
+        <select id="join-band">
+            <option value="0">--No Bands Available--</option>
+        </select>
+
+        <br>
+
+        <label for="create-band">Create Band:</label>
+        <input id="create-band" type="text" disabled>
+
+        <br>
+
+        <input type="submit" value="Join">
+    </form>
+
+    <hr>
+
+    <h4>Connected Users</h4>
+    <ul id="users"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io();
+
+        let userForm = document.getElementById('userForm');
+
+        let username = document.getElementById('username');
+
+        let bandSelectors = document.querySelectorAll('input[name="band-select"]');
+        let bandSelected = document.querySelector('input[name="band-select"][checked]');
+        let joinBandInput = document.getElementById('join-band');
+        let createBandInput = document.getElementById('create-band');
+
+        let users = document.getElementById('users');
+
+        socket.emit('get active users');
+
+        function createUser(e){
+            e.preventDefault();
+
+            if (username.value !== '') {
+                let user = {
+                  username: username.value,
+                  bandname: (bandSelected.id === 'join-band-radio') ? joinBandInput[joinBandInput.selectedIndex].value : createBandInput.value
+                };
+                socket.emit('new user', user, function (isSuccess) {
+                    console.log(isSuccess);
+                    if (isSuccess) {
+                        userForm.style.opacity = 0;
+                        username.value = '';
+                    }
+                });
+            }
+        }
+
+        bandSelectors.forEach(function (radioBtn) {
+            radioBtn.addEventListener('change', function (e) {
+                bandSelected = e.target;
+                if (e.target.id === 'join-band-radio') {
+                    joinBandInput.disabled = false;
+                    createBandInput.disabled = true;
+                } else {
+                    joinBandInput.disabled = true;
+                    createBandInput.disabled = false;
+                    createBandInput.focus();
+                }
+            });
+        });
+
+        socket.on('get users', function (data) {
+            let s = '';
+            for (i = 0; i < data.length; i++) {
+                s += `<li>${data[i]}</li>`;
+            }
+            users.innerHTML = s;
+        });
+
+        socket.on('get bands', function (data) {
+            console.log(data);
+            if (data.length !== 0){
+                let s = '';
+                for (i = 0; i < data.length; i++) {
+                    s += `<option value="${data[i]}">${data[i]}</option>`;
+                }
+                joinBandInput.innerHTML = s;
+            }
+        });
+
+        socket.on('connectToRoom',function(roomNo) {
+            document.title = "Jam Space"+roomNo;
+        });
+    </script>
+</body>
+</html>
