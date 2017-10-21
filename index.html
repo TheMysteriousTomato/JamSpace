@@ -49,6 +49,9 @@
         <li style="list-style-type:none;float:left;margin-top:-1rem;margin-left:-2rem;padding-left:.5rem">0 users connected</li>
     </ul>
 
+    <audio data-instrument="drum"   data-default-key="65" data-custom-key="65" src="/snare"></audio>
+    <audio data-instrument="guitar" data-default-key="65" data-custom-key="65" src="/hihat"></audio>
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
         let socket = io();
@@ -66,6 +69,11 @@
 
         let users = document.getElementById('users');
 
+        let drums   = [...document.querySelectorAll("audio[data-instrument=drum]")];
+        let guitars = [...document.querySelectorAll("audio[data-instrument=guitar]")];
+
+        let instrumentType = '';
+
         socket.emit('get active users');
 
         function createUser(e){
@@ -82,6 +90,7 @@
                     if (isSuccess) {
                         userForm.style.opacity = 0;
                         username.value = '';
+                        instrumentType = instrument[instrument.selectedIndex].value;
                     }
                 });
             }
@@ -96,8 +105,17 @@
                    keyCode: key,
                    instrument: "empty"
                };
+               if (instrumentType === "drum") {
+                   let sound = drums.filter( el => el.dataset.customKey === key.toString())[0];
+                   sound.currentTime = 0;
+                   sound.play().then();
+               }
+               if (instrumentType === "guitar") {
+                   let sound = guitars.filter( el => el.dataset.customKey === key.toString())[0];
+                   sound.currentTime = 0;
+                   sound.play().then();
+               }
                socket.emit('new key press', keyEvent);
-               /* message sent, play instrument sound */
            }
         });
 
@@ -143,6 +161,17 @@
 
         socket.on('get key press', function(keyEventData) {
            console.log("received: ", keyEventData);
+            if (keyEventData.instrument === "drum") {
+                let sound = drums.filter( el => el.dataset.defaultKey === keyEventData.key.toString())[0];
+                console.log(sound);
+                sound.currentTime = 0;
+                sound.play().then();
+            }
+            if (keyEventData.instrument === "guitar") {
+                let sound = guitars.filter( el => el.dataset.defaultKey === keyEventData.key.toString())[0];
+                sound.currentTime = 0;
+                sound.play().then();
+            }
         });
     </script>
 </body>

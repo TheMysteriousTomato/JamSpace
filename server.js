@@ -11,6 +11,13 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/snare', function (req, res) {
+    res.sendFile(__dirname + '/sounds/drums/snare.wav');
+});
+app.get('/hihat', function (req, res) {
+    res.sendFile(__dirname + '/sounds/guitar/hihat.wav');
+});
+
 io.on('connection', function(socket){
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
