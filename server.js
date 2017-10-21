@@ -1,6 +1,9 @@
 let app    = require('express')();
 let server = require('http').Server(app);
-let io     = require('socket.io')(server);
+let io     = require('socket.io')(server, {
+    path: '/socket.io',
+    serveClient: false,
+});
 
 let users = [];
 let connections = [];
@@ -87,17 +90,6 @@ io.on('connection', function(socket){
             }
         });
         updateBands();
-    });
-
-    // Disconnect
-    socket.on('disconnect', function(){
-        let userIndex = users.indexOf(socket.username);
-        if (userIndex !== -1)
-            users.splice(userIndex, 1);
-        updateUsernames();
-
-        connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnected: %s sockets connected', connections.length);
     });
 });
 
