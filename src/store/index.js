@@ -27,7 +27,7 @@ export default new Vuex.Store({
       if (user && $socket) {
         $socket.emit('new user', user, (success) => {
           if (success) {
-            commit('register', { user: user.username, bandName: user.band, connectedRoom: null });
+            commit('register', { user: user.username, bandName: user.bandname, connectedRoom: null });
           }
         });
       }

@@ -8,7 +8,7 @@ import store from './store';
 
 Vue.config.productionTip = false;
 
-Vue.use(VueSocket, 'http://localhost:3000/socket.io', store);
+Vue.use(VueSocket, 'http://localhost:3000', store);
 
 /* eslint-disable no-new */
 new Vue({
