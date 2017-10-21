@@ -67,11 +67,13 @@ io.on('connection', function(socket){
             users.splice(userIndex, 1);
         updateUsernames();
 
-        console.log("room ",io.nsps['/'].adapter.rooms[socket.bandname]);
-        let currentRoomIndex = Object.keys(io.nsps['/'].adapter.rooms).indexOf(socket.bandname);
-        if (currentRoomIndex !== -1)
-        {
-            let bandIndex = bands.indexOf(socket.bandname);
+        let currentRoom = io.nsps['/'].adapter.rooms[socket.bandname];
+        let bandIndex = bands.indexOf(socket.bandname);
+        if (currentRoom) {
+            if (Object.keys(currentRoom).length === 1)
+                if (bandIndex !== -1)
+                    bands.splice(bandIndex, 1);
+        } else {
             if (bandIndex !== -1)
                 bands.splice(bandIndex, 1);
         }
