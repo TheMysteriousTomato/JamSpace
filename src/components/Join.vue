@@ -1,16 +1,17 @@
 <template>
   <form @submit.prevent="registerUser">
+    <span>Band:</span>
+    <input type="radio" value="join" v-model="select" />
+    <label for="join-band">Join</label>
+
+    <input type="radio" value="create" v-model="select" />
+    <label for="create-band">Create</label>
+
+    <br />
+
     <label for="username">Username</label>
     <input name="username" type="text" v-model="username" />
     
-    <br />
-
-    <label for="join-band">Join</label>
-    <input type="radio" value="join" v-model="select" />
-
-    <label for="create-band">Create</label>
-    <input type="radio" value="create" v-model="select" />
-
     <br />
   
     <div v-if="select === 'join'">
@@ -19,8 +20,6 @@
         <option value="null">No Bands Available</option>
       </select>
     </div>
-
-    <br />
     
     <div v-if="select === 'create'">
       <label for="create-band">Create Band:</label>
