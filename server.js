@@ -10,7 +10,7 @@ let bands = new Map();
 const instruments = Object.freeze(["drums", "guitar"]);
 
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index_original.html');
 });
 
 app.get('/sounds/:instrument/:sound', function (req, res) {
