@@ -45,6 +45,11 @@ io.on('connection', function(socket){
         updateUsernames();
     });
 
+    // Key Press Received
+    socket.on('new key press', function (keyEventData) {
+        socket.broadcast.to(socket.bandname).emit('get key press', keyEventData.keyCode);
+    });
+
     // Get List of All Users and Bands
     socket.on('get active users', function() { updateUsernames();getBands(); console.log("Rooms", Object.keys(io.nsps['/'].adapter.rooms)); });
 
