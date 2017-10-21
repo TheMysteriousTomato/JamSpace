@@ -36,7 +36,9 @@
     <hr>
 
     <h4>Connected Users</h4>
-    <ul id="users"></ul>
+    <ul id="users">
+        <li style="list-style-type:none;float:left;margin-top:-1rem;margin-left:-2rem;padding-left:.5rem">0 users connected</li>
+    </ul>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -87,27 +89,29 @@
             });
         });
 
-        socket.on('get users', function (data) {
-            let s = '';
-            for (i = 0; i < data.length; i++) {
-                s += `<li>${data[i]}</li>`;
+        socket.on('get users', function (usersList) {
+            if (usersList.length !== 0) {
+                let s = '';
+                for (i = 0; i < usersList.length; i++) {
+                    s += `<li>${usersList[i]}</li>`;
+                }
+                users.innerHTML = s;
             }
-            users.innerHTML = s;
         });
 
-        socket.on('get bands', function (data) {
-            console.log(data);
-            if (data.length !== 0){
+        socket.on('get bands', function (bandsList) {
+            console.log(bandsList);
+            if (bandsList.length !== 0){
                 let s = '';
-                for (i = 0; i < data.length; i++) {
-                    s += `<option value="${data[i]}">${data[i]}</option>`;
+                for (i = 0; i < bandsList.length; i++) {
+                    s += `<option value="${bandsList[i]}">${bandsList[i]}</option>`;
                 }
                 joinBandInput.innerHTML = s;
             }
         });
 
         socket.on('connectToRoom',function(roomNo) {
-            document.title = "Jam Space"+roomNo;
+            document.title = "Jam Space "+roomNo;
         });
     </script>
 </body>

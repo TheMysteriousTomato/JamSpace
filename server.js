@@ -35,16 +35,18 @@ io.on('connection', function(socket){
 
             // join room
             socket.join(socket.bandname);
-
-            io.sockets.in(socket.bandname).emit('connectToRoom', " "+socket.bandname);
-            bands.push(socket.bandname);
+            // broadcast to room: band name
+            io.sockets.in(socket.bandname).emit('connectToRoom', socket.bandname);
+            // only add band the first time
+            if ( bands.indexOf(socket.bandname) === -1 )
+                bands.push(socket.bandname);
             getBands();
         }
         updateUsernames();
     });
 
     // Get List of All Users and Bands
-    socket.on('get active users', function() { updateUsernames();getBands(); });
+    socket.on('get active users', function() { updateUsernames();getBands(); console.log("Rooms", Object.keys(io.nsps['/'].adapter.rooms)); });
 
     function getBands() {
         io.sockets.emit('get bands', bands);
@@ -59,6 +61,15 @@ io.on('connection', function(socket){
         if (userIndex !== -1)
             users.splice(userIndex, 1);
         updateUsernames();
+
+        console.log("room ",io.nsps['/'].adapter.rooms[socket.bandname]);
+        let currentRoomIndex = Object.keys(io.nsps['/'].adapter.rooms).indexOf(socket.bandname);
+        if (currentRoomIndex !== -1)
+        {
+            let bandIndex = bands.indexOf(socket.bandname);
+            if (bandIndex !== -1)
+                bands.splice(bandIndex, 1);
+        }
 
         connections.splice(connections.indexOf(socket), 1);
         console.log('Disconnected: %s sockets connected', connections.length);
