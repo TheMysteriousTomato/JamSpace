@@ -46,7 +46,7 @@ io.on('connection', function(socket){
     });
 
     // Get List of All Users and Bands
-    socket.on('get active users', function() { updateUsernames();getBands(); });
+    socket.on('get active users', function() { updateUsernames();getBands(); console.log("Rooms", Object.keys(io.nsps['/'].adapter.rooms)); });
 
     function getBands() {
         io.sockets.emit('get bands', bands);
@@ -62,7 +62,9 @@ io.on('connection', function(socket){
             users.splice(userIndex, 1);
         updateUsernames();
 
-        if (io.nsps['/'].adapter.rooms[socket.bandname] && io.nsps['/'].adapter.rooms[socket.bandname].length === 1)
+        console.log("room ",io.nsps['/'].adapter.rooms[socket.bandname]);
+        let currentRoomIndex = Object.keys(io.nsps['/'].adapter.rooms).indexOf(socket.bandname);
+        if (currentRoomIndex !== -1)
         {
             let bandIndex = bands.indexOf(socket.bandname);
             if (bandIndex !== -1)
