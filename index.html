@@ -30,6 +30,15 @@
 
         <br>
 
+        <label for="instrument">Instrument: </label>
+        <select id="instrument">
+            <option value="drum">drum</option>
+            <option value="guitar">guitar</option>
+            <option value="other">other</option>
+        </select>
+
+        <br>
+
         <input type="submit" value="Join">
     </form>
 
@@ -48,6 +57,8 @@
 
         let username = document.getElementById('username');
 
+        let instrument = document.getElementById('instrument');
+
         let bandSelectors = document.querySelectorAll('input[name="band-select"]');
         let bandSelected = document.querySelector('input[name="band-select"][checked]');
         let joinBandInput = document.getElementById('join-band');
@@ -62,8 +73,9 @@
 
             if (username.value !== '') {
                 let user = {
-                  username: username.value,
-                  bandname: (bandSelected.id === 'join-band-radio') ? joinBandInput[joinBandInput.selectedIndex].value : createBandInput.value
+                    username: username.value,
+                    bandname: (bandSelected.id === 'join-band-radio') ? joinBandInput[joinBandInput.selectedIndex].value : createBandInput.value,
+                    instrument: instrument[instrument.selectedIndex].value
                 };
                 socket.emit('new user', user, function (isSuccess) {
                     console.log(isSuccess);

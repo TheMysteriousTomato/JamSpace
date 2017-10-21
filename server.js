@@ -20,6 +20,7 @@ io.on('connection', function(socket){
         callback(true);
         socket.username = user.username;
         socket.bandname = user.bandname;
+        socket.instrument = user.instrument;
         users.push(socket.username);
 
         // Join Room
@@ -47,7 +48,7 @@ io.on('connection', function(socket){
 
     // Key Press Received
     socket.on('new key press', function (keyEventData) {
-        socket.broadcast.to(socket.bandname).emit('get key press', keyEventData.keyCode);
+        socket.broadcast.to(socket.bandname).emit('get key press', { instrument: socket.instrument, key: keyEventData.keyCode });
     });
 
     // Get List of All Users and Bands
