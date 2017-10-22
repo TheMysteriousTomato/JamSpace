@@ -18,6 +18,10 @@ app.get('/sounds/:instrument/:sound', function (req, res) {
     else res.sendFile(__dirname + `/sounds/${req.params.instrument}/${req.params.sound}`);
 });
 
+app.get("/play", function (req, res) {
+    res.sendFile(__dirname + "/templates/play.html");
+});
+
 io.on('connection', function(socket){
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
