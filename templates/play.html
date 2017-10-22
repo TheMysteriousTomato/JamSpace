@@ -162,6 +162,41 @@
 
             transform: translateY(75%);
         }
+        
+        @media screen and (max-width: 600px) {
+            .grid {
+                height: auto;
+            }
+
+            .tile kbd {
+                font-size: 2rem;
+            }
+            .tile i {
+                font-size: 1.5rem;
+            }
+            .tile span {
+                font-size: .5rem;
+            }
+
+            .user-grid-container {
+                flex: .55 !important;
+            }
+            .user-grid {
+                grid-template: repeat(3, 1fr) / repeat(2, 1fr);
+            }
+
+            .others-grid-container {
+                flex: .45 !important;
+
+                flex-direction: column;
+            }
+            .others-grid-container .tile-wrap {
+                width: 100%;
+            }
+            .others-grid-container .tile {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
