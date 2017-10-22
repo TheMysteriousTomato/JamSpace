@@ -7,15 +7,15 @@ let connections = [];
 
 let bands = [];
 
+const instruments = Object.freeze(["drums", "guitar"]);
+
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/snare', function (req, res) {
-    res.sendFile(__dirname + '/sounds/drums/snare.wav');
-});
-app.get('/hihat', function (req, res) {
-    res.sendFile(__dirname + '/sounds/guitar/hihat.wav');
+app.get('/sounds/:instrument/:sound', function (req, res) {
+    if ( instruments.indexOf(req.params.instrument) === -1 ) res.sendStatus(403).end();
+    else res.sendFile(__dirname + `/sounds/${req.params.instrument}/${req.params.sound}`);
 });
 
 io.on('connection', function(socket){
