@@ -74,6 +74,7 @@
         let guitars = [...document.querySelectorAll("audio[data-instrument=guitar]")];
 
         let instrumentType = '';
+        let bandName = '';
 
         socket.emit('get active users');
 
@@ -81,9 +82,10 @@
             e.preventDefault();
 
             if (username.value !== '') {
+                bandName = (bandSelected.id === 'join-band-radio') ? joinBandInput[joinBandInput.selectedIndex].value : createBandInput.value;
                 let user = {
                     username: username.value,
-                    bandname: (bandSelected.id === 'join-band-radio') ? joinBandInput[joinBandInput.selectedIndex].value : createBandInput.value,
+                    bandname: bandName,
                     instrument: instrument[instrument.selectedIndex].value
                 };
                 socket.emit('new user', user, function (isSuccess) {
@@ -104,7 +106,8 @@
            {
                let keyEvent = {
                    keyCode: key,
-                   instrument: "empty"
+                   instrument: instrumentType,
+                   bandname: bandName
                };
                if (instrumentType === "drum") {
                    let sound = drums.filter( el => el.dataset.customKey === key.toString())[0];
@@ -135,7 +138,7 @@
         });
 
         socket.on('get users', function (usersList) {
-            console.log(usersList);
+            console.log("userList", usersList);
             if (usersList.length !== 0) {
                 let s = '';
                 for (i = 0; i < usersList.length; i++) {
@@ -145,13 +148,14 @@
             }
         });
 
-        socket.on('get bands', function (bandsList) {
-            console.log(bandsList);
-            if (bandsList.length !== 0){
+        socket.on('get bands', function (bandsObj) {
+            let bandsMap = JSON.parse(bandsObj);
+            console.log("bandsMap", bandsMap);
+            if (bandsMap.bands.length !== 0){
                 let s = '';
-                for (i = 0; i < bandsList.length; i++) {
-                    s += `<option value="${bandsList[i]}">${bandsList[i]}</option>`;
-                }
+                bandsMap.bands.forEach(function(value, index){
+                    s += `<option value="${value}">${value}: ${bandsMap.count[index]}</option>`;
+                });
                 joinBandInput.innerHTML = s;
             }
         });

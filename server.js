@@ -5,7 +5,7 @@ let io     = require('socket.io')(server);
 let users = [];
 let connections = [];
 
-let bands = [];
+let bands = new Map();
 
 const instruments = Object.freeze(["drums", "guitar"]);
 
@@ -26,14 +26,13 @@ io.on('connection', function(socket){
     socket.on('new user', function (user, callback) {
         callback(true);
         socket.username = user.username;
-        socket.bandname = user.bandname;
         socket.instrument = user.instrument;
         users.push(socket.username);
 
         // Join Room
 
         // check if room exists && number of users in room
-        if(io.nsps['/'].adapter.rooms[socket.bandname] && io.nsps['/'].adapter.rooms[socket.bandname].length > 5) {
+        if(io.nsps['/'].adapter.rooms[user.bandname] && io.nsps['/'].adapter.rooms[user.bandname].length > 5) {
 
             // fail
             callback(false);
@@ -42,31 +41,53 @@ io.on('connection', function(socket){
         } else {
 
             // join room
-            socket.join(socket.bandname);
+            socket.join(user.bandname);
             // broadcast to room: band name
-            io.sockets.in(socket.bandname).emit('connectToRoom', socket.bandname);
+            io.sockets.in(user.bandname).emit('connectToRoom', user.bandname);
             // only add band the first time
-            if ( bands.indexOf(socket.bandname) === -1 )
-                bands.push(socket.bandname);
-            getBands();
+            if ( bands.get(user.bandname) === undefined )
+                bands.set(user.bandname, 1);
+            else
+                bands.set(user.bandname, bands.get(user.bandname) + 1);
+            updateBands();
         }
         updateUsernames();
     });
 
     // Key Press Received
     socket.on('new key press', function (keyEventData) {
-        socket.broadcast.to(socket.bandname).emit('get key press', { instrument: socket.instrument, key: keyEventData.keyCode });
+        socket.broadcast.to(keyEventData.bandname).emit('get key press', { instrument: keyEventData.instrument, key: keyEventData.keyCode });
     });
 
     // Get List of All Users and Bands
-    socket.on('get active users', function() { updateUsernames();getBands(); console.log("Rooms", Object.keys(io.nsps['/'].adapter.rooms)); });
+    socket.on('get active users', function() { updateUsernames();updateBands(); console.log("Rooms", Object.keys(io.nsps['/'].adapter.rooms)); });
 
-    function getBands() {
-        io.sockets.emit('get bands', bands);
+    function updateBands() {
+        let bandObj = {
+            count: Array.from(bands.values()),
+            bands: Array.from(bands.keys())
+        };
+        io.sockets.emit('get bands', JSON.stringify(bandObj));
     }
     function updateUsernames() {
         io.sockets.emit('get users', users);
     }
+
+    // On Before Disconnect
+    socket.on('disconnecting', function () {
+        let currentRooms = Object.keys(this.rooms);
+        currentRooms.forEach(function (currentRoom) {
+            let bandCount = bands.get(currentRoom);
+            // if room is a band
+            if (bandCount !== undefined) {
+                if (bandCount !== 1)
+                    bands.set(currentRoom, bands.get(currentRoom) - 1);
+                else
+                    bands.delete(currentRoom);
+            }
+        });
+        updateBands();
+    });
 
     // Disconnect
     socket.on('disconnect', function(){
@@ -74,17 +95,6 @@ io.on('connection', function(socket){
         if (userIndex !== -1)
             users.splice(userIndex, 1);
         updateUsernames();
-
-        let currentRoom = io.nsps['/'].adapter.rooms[socket.bandname];
-        let bandIndex = bands.indexOf(socket.bandname);
-        if (currentRoom) {
-            if (Object.keys(currentRoom).length === 1)
-                if (bandIndex !== -1)
-                    bands.splice(bandIndex, 1);
-        } else {
-            if (bandIndex !== -1)
-                bands.splice(bandIndex, 1);
-        }
 
         connections.splice(connections.indexOf(socket), 1);
         console.log('Disconnected: %s sockets connected', connections.length);
