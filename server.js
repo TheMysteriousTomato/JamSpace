@@ -21,6 +21,9 @@ app.get('/sounds/:instrument/:sound', function (req, res) {
 app.get("/play", function (req, res) {
     res.sendFile(__dirname + "/templates/play.html");
 });
+app.get("/join", function (req, res) {
+    res.sendFile(__dirname + "/templates/join.html");
+});
 
 io.on('connection', function(socket){
     connections.push(socket);
