@@ -13,7 +13,7 @@ export default {
     bandInfo() {
       return {
         name: this.$store.state.bandName,
-        room: this.$store.state.connectedRoom,
+        instrument: this.$store.state.instrument,
         user: this.$store.state.user,
       };
     },

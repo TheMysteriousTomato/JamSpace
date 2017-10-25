@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     bandName: null,
-    connectedRoom: null,
+    instrument: null,
     user: null,
   },
   getters: {
@@ -15,7 +15,7 @@ export default new Vuex.Store({
   mutations: {
     register: (state, payload) => {
       state.bandName = payload.bandName;
-      state.connectedRoom = payload.bandName;
+      state.instrument = payload.instrument;
       state.user = payload.user;
     },
   },
@@ -28,7 +28,7 @@ export default new Vuex.Store({
       if (user && $socket) {
         $socket.emit('new user', user, (success) => {
           if (success) {
-            commit('register', { user: user.username, bandName: user.bandname, connectedRoom: null });
+            commit('register', { user: user.username, bandName: user.bandName, instrument: user.instrument });
             $router.replace({ path: '/band' });
           }
         });

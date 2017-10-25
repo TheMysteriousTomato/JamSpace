@@ -2,7 +2,6 @@ let app    = require('express')();
 let server = require('http').Server(app);
 let io     = require('socket.io')(server, {
     path: '/socket.io',
-    serveClient: false,
 });
 
 let users = [];
