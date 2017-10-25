@@ -23,11 +23,13 @@ export default new Vuex.Store({
     registerUser({ commit }, payload) {
       const user = payload.user;
       const $socket = payload.$socket;
+      const $router = payload.$router;
 
       if (user && $socket) {
         $socket.emit('new user', user, (success) => {
           if (success) {
             commit('register', { user: user.username, bandName: user.bandname, connectedRoom: null });
+            $router.replace({ path: '/band' });
           }
         });
       }

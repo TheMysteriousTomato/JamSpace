@@ -48,7 +48,11 @@
           bandname: this.band,
         };
 
-        this.$store.dispatch('registerUser', { user, $socket: this.$socket });
+        this.$store.dispatch('registerUser', {
+          user,
+          $socket: this.$socket,
+          $router: this.$router,
+        });
       },
     },
   };
