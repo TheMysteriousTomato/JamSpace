@@ -24,19 +24,20 @@ io.on('connection', function(socket){
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
     console.log(users);
-    // New User
+
+    /* New User */
     socket.on('new user', function (user, callback) {
         callback(true);
         socket.username = user.username;
         socket.instrument = user.instrument;
         users.push(socket.username);
 
-        // Join Room
-
+        /* Join Room */
         // check if room exists && number of users in room
-        if(io.nsps['/'].adapter.rooms[user.bandname] && io.nsps['/'].adapter.rooms[user.bandname].length > 5) {
+        if( io.nsps['/'].adapter.rooms[user.bandname] &&
+            io.nsps['/'].adapter.rooms[user.bandname].length > 5) {
 
-            // fail
+            // fail if too many users
             callback(false);
             return;
 
@@ -56,13 +57,26 @@ io.on('connection', function(socket){
         updateUsernames();
     });
 
-    // Key Press Received
+    /* Key Press Received */
     socket.on('new key press', function (keyEventData) {
-        socket.broadcast.to(keyEventData.bandname).emit('get key press', { instrument: keyEventData.instrument, key: keyEventData.keyCode });
+        socket.broadcast
+            .to(keyEventData.bandname)
+            .emit('get key press', {
+                instrument: keyEventData.instrument,
+                key: keyEventData.keyCode
+            });
     });
 
     // Get List of All Users and Bands
-    socket.on('get active users', function() { updateUsernames();updateBands(); console.log("Rooms", Object.keys(io.nsps['/'].adapter.rooms)); });
+    socket.on('get active users', function(){
+        updateAll();
+    });
+
+    function updateAll() {
+        updateUsernames();
+        updateBands();
+        console.log("Rooms", Object.keys(io.nsps['/'].adapter.rooms));
+    }
 
     function updateBands() {
         let bandObj = {
@@ -89,6 +103,17 @@ io.on('connection', function(socket){
             }
         });
         updateBands();
+    });
+
+    // Disconnect
+    socket.on('disconnect', function(){
+        let userIndex = users.indexOf(socket.username);
+        if (userIndex !== -1)
+            users.splice(userIndex, 1);
+        updateAll();
+
+        connections.splice(connections.indexOf(socket), 1);
+        console.log('Disconnected: %s sockets connected', connections.length);
     });
 });
 
