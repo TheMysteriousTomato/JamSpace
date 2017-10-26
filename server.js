@@ -1,6 +1,8 @@
 let app    = require('express')();
 let server = require('http').Server(app);
-let io     = require('socket.io')(server);
+let io     = require('socket.io')(server, {
+    path: '/socket.io',
+});
 
 let users = [];
 let connections = [];
@@ -10,7 +12,7 @@ let bands = new Map();
 const instruments = Object.freeze(["drums", "guitar"]);
 
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index_original.html');
 });
 
 app.get('/sounds/:instrument/:sound', function (req, res) {
@@ -87,17 +89,6 @@ io.on('connection', function(socket){
             }
         });
         updateBands();
-    });
-
-    // Disconnect
-    socket.on('disconnect', function(){
-        let userIndex = users.indexOf(socket.username);
-        if (userIndex !== -1)
-            users.splice(userIndex, 1);
-        updateUsernames();
-
-        connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnected: %s sockets connected', connections.length);
     });
 });
 
