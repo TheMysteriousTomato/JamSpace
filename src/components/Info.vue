@@ -1,7 +1,7 @@
 <template>
 <div>
   <dl v-for="infoItem in Object.keys(bandInfo)" :key="infoItem">
-    <dd>{{ infoItem | capitalize }}</dd>
+    <dd style="text-transform: capitalize">{{ infoItem }}:</dd>
     <dt>{{ bandInfo[infoItem] }}</dt>
   </dl>
 </div>
@@ -16,12 +16,6 @@ export default {
         instrument: this.$store.state.instrument,
         user: this.$store.state.user,
       };
-    },
-  },
-  filters: {
-    capitalize(value) {
-      if (!value) return false;
-      return value.charAt(0).toUpperCase() + value.slice(1);
     },
   },
 };

@@ -20,4 +20,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+dd, dt {
+  display: inline-block;
+}
 </style>
