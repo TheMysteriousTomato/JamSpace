@@ -8,6 +8,11 @@ export default new Vuex.Store({
     bandName: null,
     instrument: null,
     user: null,
+    bands: [
+        { name: 'a' },
+        { name: 'b' },
+        { name: 'c' },
+    ],
   },
   getters: {
     isConnected: state => (state.bandName !== null && state.user !== null),
