@@ -2,10 +2,12 @@
   <form @submit.prevent="registerUser">
     <span>Band:</span>
     <label for="join-band">Join</label>
-    <input id="join-band" type="radio" value="join" v-model="select" />
+    <!-- TODO: v-bind is blocked by v-model -->
+    <input id="join-band" type="radio" name="join-or-create" value="join" v-model="select" :checked="bands.length !== 0"/>
 
     <label for="create-band">Create</label>
-    <input id="create-band" type="radio" value="create" v-model="select" />
+    <!-- TODO: v-bind is blocked by v-model -->
+    <input id="create-band" type="radio" name="join-or-create" value="create" v-model="select" :checked="bands.length === 0"/>
 
     <br />
 
