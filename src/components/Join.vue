@@ -2,12 +2,10 @@
   <form @submit.prevent="registerUser">
     <span>Band:</span>
     <label for="join-band">Join</label>
-    <!-- TODO: v-bind is blocked by v-model -->
-    <input id="join-band" type="radio" name="join-or-create" value="join" v-model="select" :checked="bands.length !== 0"/>
+    <input id="join-band" type="radio" name="join-or-create" v-model="select" value="join"/>
 
     <label for="create-band">Create</label>
-    <!-- TODO: v-bind is blocked by v-model -->
-    <input id="create-band" type="radio" name="join-or-create" value="create" v-model="select" :checked="bands.length === 0"/>
+    <input id="create-band" type="radio" name="join-or-create" v-model="select" value="create"/>
 
     <br />
 
@@ -76,6 +74,16 @@
           $socket: this.$socket,
           $router: this.$router,
         });
+      },
+    },
+    mounted() {
+      this.$nextTick(() => {
+        this.select = this.bands.length === 0 ? 'create' : 'join';
+      });
+    },
+    computed: {
+      bandsToJoin() {
+        return this.bands.length === 0 ? 'create' : 'join';
       },
     },
   };
