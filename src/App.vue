@@ -8,6 +8,14 @@
 <script>
 export default {
   name: 'app',
+  sockets: {
+    'get bands': function (bandObj) {
+      this.$store.dispatch('updateBands', {
+        count: bandObj.count,
+        bands: bandObj.bands,
+      });
+    },
+  },
 };
 </script>
 
