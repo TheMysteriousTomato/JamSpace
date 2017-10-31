@@ -5,6 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    bands: [],
+    bandCount: 0,
     bandName: null,
     instrument: null,
     user: null,
@@ -17,6 +19,18 @@ export default new Vuex.Store({
       state.bandName = payload.bandName;
       state.instrument = payload.instrument;
       state.user = payload.user;
+    },
+    addBand: (state, payload) => {
+      const band = payload.band;
+      if (state.bands.indexOf(band) === -1) {
+        state.bands.push(band);
+      }
+    },
+    updateBandCount: (state, payload) => {
+      const count = payload.count;
+      if (count > 0) {
+        state.bandCount = count;
+      }
     },
   },
   actions: {
@@ -33,6 +47,13 @@ export default new Vuex.Store({
           }
         });
       }
+    },
+    updateBands({ commit }, payload) {
+      const count = payload.band.count;
+      const bands = payload.band.bands;
+
+      bands.forEach(band => (commit('addBand', { band })));
+      commit('updateBandCount', { count });
     },
   },
 });
