@@ -29,6 +29,9 @@ app.get('/play', (req, res) => {
 app.get('/join', (req, res) => {
   res.sendFile(`${__dirname}/templates/join.html`);
 });
+app.get('/paper.min.css', (req, res) => {
+  res.sendFile(`${__dirname}/templates/paper.min.css`);
+});
 
 function updateBands() {
   const bandObj = {

@@ -8,6 +8,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/paper.min.css">
     <style>
         /*=== Base ===*/
         :root {
@@ -21,7 +22,7 @@
 
             font-family: 'Noto Sans', sans-serif;
 
-            background-color: #eee;
+            background: lightblue;
         }
         * {
             box-sizing: border-box;
@@ -50,50 +51,30 @@
         }
 
         /*=== Join Form ===*/
-        section.form-container {
-            height: 67vh;
-            background: lightblue;
-        }
         section.form-container form {
             margin: auto 20%;
-            text-align: center;
         }
-        section.form-container form .button {
-            background: blue;
-            color: ghostwhite;
-            border-radius: 5px;
-            padding: 1rem 3rem;
-            border: none;
-            margin-top: 15%;
 
+        .form-group label.paper-radio {
+            display: inline-block;
+        }
+        input:disabled {
+            border-color: #666
+        }
+        select {
+            height: 2rem
+        }
+        button {
             float: right;
+            margin-bottom: 2rem;
+            background-color: #33d733;
         }
-        section.form-container form .form-grid {
-            display: flex;
+        button:hover {
+            color: #fafafa;
+            background: #229522
         }
-        section.form-container form .form-grid .form-group {
-            flex: 1;
-            padding: 1rem;
-            width: 33%;
-        }
-        .form-group label {
-            margin-right: 1rem;
-        }
-
-        @media screen and (max-width: 600px) {
-            section.form-container form {
-                margin: auto;
-            }
-            section.form-container form .button {
-                float: none;
-            }
-            section.form-container form .form-grid {
-                flex-direction: column;
-            }
-            section.form-container form .form-grid .form-group {
-                width: 100%;
-                text-align: center;
-            }
+        button:active {
+            background: #176417
         }
     </style>
 </head>
@@ -101,36 +82,46 @@
 <h1 class="title">Jam Space</h1>
 <section class="form-container">
     <form action="/" onsubmit="return false;">
-        <div class="form-grid">
-            <div class="form-group">
-                <label for="username">Username</label><input id="username" type="text" placeholder="Enter a Name">
+        <div class="row">
+            <div class="col sm-4">
+                <div class="form-group">
+                    <label for="username">Enter a name</label>
+                    <input id="username" class="input-block" type="text" placeholder="(e.g. Axel Rose)">
+                </div>
             </div>
-            <div class="form-group">
-                <input type="radio" name="band-selector" title="Join a Band" checked>
-                <label for="select-band">Select a Band</label>
-                <select name="select-band" id="select-band">
-                    <option value="">Lorem.</option>
-                    <option value="">Exercitationem.</option>
-                    <option value="">Totam!</option>
-                    <option value="">Eveniet?</option>
-                    <option value="">Porro.</option>
-                </select>
-                <br>
-                <input type="radio" name="band-selector" title="Create a Band">
-                <label for="create-band">Username</label><input id="create-band" type="text" placeholder="Enter a Bandname" disabled>
+            <div class="col sm-4">
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        <label for="join-radio" class="paper-radio">
+                            <input type="radio" name="create-join-selector" id="join-radio" checked><span>Join a Band</span>
+                        </label>
+                        <select id="select-band" class="input-block" title="Select a band">
+                            <option value="1">Poppin' Peonies</option>
+                            <option value="2">Shivering Snowflakes</option>
+                            <option value="3">Outlandish Oranges</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-radio" class="paper-radio">
+                            <input type="radio" name="create-join-selector" id="create-radio"><span>Create a Band</span>
+                        </label>
+                        <input id="bandname" class="input-block" type="text" title="Enter a band name" placeholder="(e.g. Happy Humans)" disabled>
+                    </div>
+                </fieldset>
             </div>
-            <div class="form-group">
-                <label for="select-instrument">Select a Band</label>
-                <select name="select-band" id="select-instrument">
-                    <option value="">Lorem.</option>
-                    <option value="">Exercitationem.</option>
-                    <option value="">Totam!</option>
-                    <option value="">Eveniet?</option>
-                    <option value="">Porro.</option>
-                </select>
+            <div class="col sm-4">
+                <div class="form-group">
+                    <label for="select-instrument">Select</label>
+                    <select id="select-instrument" class="input-block">
+                        <option value="1">Drums</option>
+                        <option value="2">Guitar</option>
+                        <option value="3">Other</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <input type="submit" class="button" value="Join">
+            <!--<legend>Some Radio Buttons</legend>-->
+        <button>Join</button>
     </form>
 </section>
 </body>
