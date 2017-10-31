@@ -101,18 +101,20 @@ io.on('connection', (socket) => {
 
   /* On Before Disconnect */
   socket.on('disconnecting', () => {
-    const currentRooms = Object.keys(this.rooms);
-    currentRooms.forEach((currentRoom) => {
-      const bandCount = bands.get(currentRoom);
-      // if room is a band
-      if (bandCount !== undefined) {
-        if (bandCount !== 1) {
-          bands.set(currentRoom, bands.get(currentRoom) - 1);
-        } else {
-          bands.delete(currentRoom);
+    if (typeof this.rooms !== 'undefined') {
+      const currentRooms = Object.keys(this.rooms);
+      currentRooms.forEach((currentRoom) => {
+        const bandCount = bands.get(currentRoom);
+        // if room is a band
+        if (bandCount !== undefined) {
+          if (bandCount !== 1) {
+            bands.set(currentRoom, bands.get(currentRoom) - 1);
+          } else {
+            bands.delete(currentRoom);
+          }
         }
-      }
-    });
+      });
+    }
     updateBands();
   });
 
