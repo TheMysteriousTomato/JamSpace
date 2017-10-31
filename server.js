@@ -48,7 +48,7 @@ function updateBands() {
 }
 
 function updateUsernames() {
-  io.sockets.emit('get users', users);
+  io.sockets.emit('get active users', users);
 }
 
 io.on('connection', (socket) => {
@@ -114,6 +114,8 @@ io.on('connection', (socket) => {
     console.log("Rooms", rooms);
   });
 
+
+  // Before Disconnect
   socket.on('disconnecting', () => {
     Object.keys(socket.rooms).forEach((room) => {
       const bandCount = bands.get(room);
@@ -128,6 +130,20 @@ io.on('connection', (socket) => {
 
       updateBands();
     });
+  });
+
+  // Disconnect
+  socket.on('disconnect', () => {
+    const userIndex = users.indexOf(socket.username);
+    if (userIndex !== -1) {
+      users.splice(userIndex, 1);
+    }
+    updateUsernames();
+
+    connections.splice(connections.indexOf(socket), 1);
+
+    // eslint-disable-next-line
+    console.log('Disconnected: %s sockets connected', connections.length);
   });
 });
 
