@@ -18,7 +18,7 @@
   
     <div v-if="select === 'join'">
       <label for="join-band-list">Join Band</label>
-      <select id="join-band-list" name="join-band" v-model="band">
+      <select id="join-band-list" name="join-band" v-model="joinBand">
         <option v-if="bands.length === 0" value="null" disabled>No Bands Available</option>
         <option v-if="bands.length !== 0" value="null" disabled>No Band Selected</option>
         <option v-for="band in bands">{{ band.name }}</option>
@@ -50,7 +50,8 @@
   export default {
     data() {
       return {
-        band: 'null',
+        band: '',
+        joinBand: 'null',
         bands: this.$store.state.bands,
         select: '',
         instrument: 'null',
