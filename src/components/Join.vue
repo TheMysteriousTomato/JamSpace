@@ -18,9 +18,10 @@
   
     <div v-if="select === 'join'">
       <label for="join-band-list">Join Band</label>
-      <select id="join-band-list" name="join-band">
-        <option v-if="bands.length === 0" value="null" :selected="bands.length === 0">No Bands Available</option>
-        <option v-if="bands.length !== 0" v-for="(band, index) in bands" :selected="index === 0" >{{ band.name }}</option>
+      <select id="join-band-list" name="join-band" v-model="band">
+        <option v-if="bands.length === 0" value="null" disabled>No Bands Available</option>
+        <option v-if="bands.length !== 0" value="null" disabled>No Band Selected</option>
+        <option v-for="band in bands">{{ band.name }}</option>
       </select>
     </div>
 
@@ -33,6 +34,7 @@
 
     <label for="instruments">Instrument</label>
     <select id="instruments" name="instrument" v-model="instrument">
+      <option value="null" disabled>No Instrument Selected</option>
       <option v-for="instrument in instruments" :key="instrument" :value="instrument">
         {{ instrument }}
       </option>
@@ -48,10 +50,10 @@
   export default {
     data() {
       return {
-        band: '',
+        band: 'null',
         bands: this.$store.state.bands,
         select: '',
-        instrument: '',
+        instrument: 'null',
         instruments: [
           'guitar',
           'drum',
