@@ -19,7 +19,7 @@
       <select id="join-band-list" name="join-band" v-model="joinBand">
         <option v-if="bands.length === 0" value="null" disabled>No Bands Available</option>
         <option v-if="bands.length !== 0" value="null" disabled>No Band Selected</option>
-        <option v-for="band in bands">{{ band }}</option>
+        <option v-for="band in bands" :value="band">{{ band }} {{ bandsMap.get(band) }}</option>
       </select>
     </div>
 
@@ -49,8 +49,9 @@
     data() {
       return {
         band: '',
-        joinBand: 'null',
-        bands: [],
+        joinBand: null,
+        bands: [], // for drop down
+        bandsMap: new Map(), // for keeping track # ppl in room
         select: '',
         instrument: 'null',
         instruments: [
@@ -64,7 +65,7 @@
     methods: {
       registerUser() {
         const user = {
-          bandname: this.band,
+          bandname: this.joinBand || this.band,
           instrument: this.instrument,
           username: this.username,
         };
@@ -88,7 +89,18 @@
       'get bands': function (bandObj) { // arrow func has incorrect 'this' reference
         bandObj = JSON.parse(bandObj);
 
-        this.bands = bandObj.bands;
+        // eslint-disable-next-line
+        console.log(bandObj);
+
+        bandObj[1].forEach((bandname, index) => {
+          // eslint-disable-next-line
+          console.log(bandname, index);
+          this.bandsMap.set(bandname, bandObj[0][index]);
+        });
+
+        // add bandnames to list for drop down
+        this.bands = bandObj[1];
+        // update select model for default action on load
         this.select = this.bands.length === 0 ? 'create' : 'join';
       },
     },

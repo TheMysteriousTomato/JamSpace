@@ -34,10 +34,10 @@ app.get('/paper.min.css', (req, res) => {
 });
 
 function updateBands() {
-  const bandObj = {
-    count: Array.from(bands.values()),
-    bands: Array.from(bands.keys()),
-  };
+  const bandObj = [
+    [...bands.values()], // count
+    [...bands.keys()], // bandnames
+  ];
   io.sockets.emit('get bands', JSON.stringify(bandObj));
 }
 function updateUsernames() {
