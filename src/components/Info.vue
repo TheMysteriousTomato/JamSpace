@@ -15,6 +15,7 @@ export default {
         name: this.$store.state.bandName,
         instrument: this.$store.state.instrument,
         user: this.$store.state.user,
+        bands: this.$store.state.storeBands,
       };
     },
   },

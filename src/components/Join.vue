@@ -19,7 +19,7 @@
       <select id="join-band-list" name="join-band" v-model="joinBand">
         <option v-if="bands.length === 0" value="null" disabled>No Bands Available</option>
         <option v-if="bands.length !== 0" value="null" disabled>No Band Selected</option>
-        <option v-for="band in bands">{{ band.name }}</option>
+        <option v-for="band in bands">{{ band }}</option>
       </select>
     </div>
 
@@ -50,7 +50,7 @@
       return {
         band: '',
         joinBand: 'null',
-        bands: this.$store.state.bands,
+        bands: [],
         select: '',
         instrument: 'null',
         instruments: [
@@ -64,7 +64,7 @@
     methods: {
       registerUser() {
         const user = {
-          bandName: this.band,
+          bandname: this.band,
           instrument: this.instrument,
           username: this.username,
         };
@@ -77,13 +77,19 @@
       },
     },
     mounted() {
-      this.$nextTick(() => {
-        this.select = this.bands.length === 0 ? 'create' : 'join';
-      });
+      if (this.bands !== undefined) {
+        this.$nextTick(() => {
+          this.select = this.bands.length === 0 ? 'create' : 'join';
+        });
+      }
     },
-    computed: {
-      bandsToJoin() {
-        return this.bands.length === 0 ? 'create' : 'join';
+    sockets: {
+      // eslint-disable-next-line
+      'get bands': function (bandObj) { // arrow func has incorrect 'this' reference
+        bandObj = JSON.parse(bandObj);
+
+        this.bands = bandObj.bands;
+        this.select = this.bands.length === 0 ? 'create' : 'join';
       },
     },
   };
