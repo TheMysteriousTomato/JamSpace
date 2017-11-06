@@ -57,8 +57,7 @@ io.on('connection', (socket) => {
   console.log('Connected: %s sockets connected', connections.length);
   console.log(users);
   /* eslint-enable no-console */
-
-    /* New User */
+  /* New User */
   socket.on('new user', (user, callback) => {
     callback(true);
     socket.username = user.username;
