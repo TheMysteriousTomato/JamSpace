@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <a href="/" style="border: solid;padding: 1.5rem">Back</a>
+  <a class="my-button" href="/">&larr;&nbsp;Back</a>
 
   <br />
 
@@ -17,3 +17,20 @@ export default {
   },
 };
 </script>
+<style>
+  .my-button {
+    padding: 1.5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    text-decoration: none;
+    color: black;
+    border: solid black;
+    background: white;
+  }
+  .my-button:hover {
+    color: white;
+    background: black;
+  }
+</style>
