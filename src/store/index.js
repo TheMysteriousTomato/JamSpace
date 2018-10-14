@@ -8,20 +8,22 @@ export default new Vuex.Store({
     bandName: null,
     instrument: null,
     user: null,
-    bands: [
-        { name: 'a' },
-        { name: 'b' },
-        { name: 'c' },
-    ],
+    storeBands: [],
   },
   getters: {
     isConnected: state => (state.bandName !== null && state.user !== null),
   },
   mutations: {
     register: (state, payload) => {
-      state.bandName = payload.bandName;
+      state.bandName = payload.bandname;
       state.instrument = payload.instrument;
       state.user = payload.user;
+    },
+    addBand: (state, payload) => {
+      const band = payload.band;
+      if (band && state.storeBands.indexOf(band) === -1) {
+        state.storeBands.push(band);
+      }
     },
   },
   actions: {
@@ -30,10 +32,12 @@ export default new Vuex.Store({
       const $socket = payload.$socket;
       const $router = payload.$router;
 
+      const band = user.bandname;
+      commit('addBand', { band });
       if (user && $socket) {
         $socket.emit('new user', user, (success) => {
           if (success) {
-            commit('register', { user: user.username, bandName: user.bandName, instrument: user.instrument });
+            commit('register', { user: user.username, bandname: user.bandName, instrument: user.instrument });
             $router.replace({ path: '/band' });
           }
         });

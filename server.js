@@ -34,10 +34,10 @@ app.get('/paper.min.css', (req, res) => {
 });
 
 function updateBands() {
-  const bandObj = {
-    count: Array.from(bands.values()),
-    bands: Array.from(bands.keys()),
-  };
+  const bandObj = [
+    [...bands.values()], // count
+    [...bands.keys()], // bandnames
+  ];
   io.sockets.emit('get bands', JSON.stringify(bandObj));
 }
 function updateUsernames() {
@@ -57,8 +57,7 @@ io.on('connection', (socket) => {
   console.log('Connected: %s sockets connected', connections.length);
   console.log(users);
   /* eslint-enable no-console */
-
-    /* New User */
+  /* New User */
   socket.on('new user', (user, callback) => {
     callback(true);
     socket.username = user.username;
