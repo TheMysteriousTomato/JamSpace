@@ -1,0 +1,84 @@
+/* Media Queries */
+
+// phone
+@mixin before-phone
+  @media only screen and #{$before-phone-query}
+    @content
+@mixin after-phone
+  @media only screen and #{$after-phone-query}
+    @content
+
+// tablet
+@mixin before-tablet
+  @media only screen and #{$before-tablet-query}
+    @content
+@mixin tablet
+  @media only screen and #{$tablet-query}
+    @content
+@mixin after-tablet
+  @media only screen and #{$after-tablet-query}
+    @content
+
+// desktop
+@mixin desktop
+  @media only screen and #{$desktop-query}
+    @content
+
+
+/* Prefixes */
+
+@mixin selection
+  ::-moz-selection
+    @content
+  ::selection
+    @content
+
+@mixin box-size($arg)
+  box-sizing: $arg
+  -moz-box-sizing: $arg
+  -webkit-box-sizing: $arg
+
+@mixin box-shadow($args...)
+  -moz-box-shadow: $args
+  -webkit-box-shadow: $args
+  box-shadow: $args
+@mixin transform ($val)
+  transform: $val
+  -webkit-transform: $val
+  -ms-transform: $val
+
+@mixin transition($transition...)
+  -moz-transition:    $transition
+  -o-transition:      $transition
+  -webkit-transition: $transition
+  transition:         $transition
+@mixin keyframe ($animation_name)
+  @-webkit-keyframes #{$animation_name}
+    @content
+  @-moz-keyframes #{$animation_name}
+    @content
+  @-o-keyframes #{$animation_name}
+    @content
+  @keyframes #{$animation_name}
+    @content
+
+@mixin animation ($delay, $duration, $animation, $direction)
+  -webkit-animation-delay: $delay
+  -webkit-animation-duration: $duration
+  -webkit-animation-name: $animation
+  -webkit-animation-fill-mode: $direction
+
+  -moz-animation-delay: $delay
+  -moz-animation-duration: $duration
+  -moz-animation-name: $animation
+  -moz-animation-fill-mode: $direction
+
+  -o-animation-delay: $delay
+  -o-animation-duration: $duration
+  -o-animation-name: $animation
+  -o-animation-fill-mode: $direction
+
+  animation-delay: $delay
+  animation-duration: $duration
+  animation-name: $animation
+  animation-fill-mode: $direction
