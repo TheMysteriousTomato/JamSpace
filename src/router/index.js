@@ -8,7 +8,7 @@ import Band from '@/components/Band';
 
 Vue.use(Router);
 
-const isConnected = store.getters.isConnected;
+const { isConnected } = store.getters;
 
 export default new Router({
   routes: [

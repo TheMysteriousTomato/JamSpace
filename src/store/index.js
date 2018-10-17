@@ -13,22 +13,22 @@ export default new Vuex.Store({
     isConnected: state => (state.bandName !== null && state.user !== null),
   },
   mutations: {
-    register: (state, payload) => {
-      state.bandName = payload.bandName;
-      state.instrument = payload.instrument;
-      state.user = payload.user;
+    register: (state, { bandName, instrument, user }) => {
+      state.bandName = bandName;
+      state.instrument = instrument;
+      state.user = user;
     },
   },
   actions: {
-    registerUser({ commit }, payload) {
-      const user = payload.user;
-      const $socket = payload.$socket;
-      const $router = payload.$router;
-
+    registerUser({ commit }, { $socket, $router, user }) {
       if (user && $socket) {
         $socket.emit('new user', user, (success) => {
           if (success) {
-            commit('register', { user: user.username, bandName: user.bandName, instrument: user.instrument });
+            commit('register', {
+              user: user.username,
+              bandName: user.bandName,
+              instrument: user.instrument,
+            });
             $router.replace({ path: '/band' });
           }
         });
