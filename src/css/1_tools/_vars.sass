@@ -1,0 +1,37 @@
+/* CSS Viewport Width */
+$device-width: "device-width"
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto')
+$body-font:      'Roboto',   sans-serif
+$secondary-font: 'Open Sans', sans-serif
+
+/* Breakpoints */
+$phone-width:   480px
+$tablet-width:  1000px // 768
+$desktop-width: 1200px
+
+$before-phone-query:  "(max-width: " + $phone-width   + ")"
+$after-phone-query:   "(min-width: " + $phone-width   + ")"
+
+$before-tablet-query: "(max-width:"  + $tablet-width  + ")"
+$tablet-query:        "(min-width: " + $phone-width   + ") and (max-width:" + $desktop-width + ")"
+$after-tablet-query:  "(min-width: " + $tablet-width  + ")"
+
+$desktop-query:       "(min-width: " + $desktop-width + ")"
+
+/* CSS Vars */
+html
+  --foo: "bar"
+
+/* Helpers */
+.clearfix
+  *zoom: 1
+.clearfix:before,
+.clearfix:after
+  display: table
+  line-height: 0
+  content: ""
+.clearfix:after
+  clear: both
+

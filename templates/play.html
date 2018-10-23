@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Play</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /*=== Base ===*/
+        :root {
+            --num: 1;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+
+            font-family: 'Noto Sans', sans-serif;
+
+            background-color: #eee;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        a,
+        a:link,
+        a:visited,
+        a:active,
+        a:hover {
+            color: #333;
+            text-decoration: none;
+        }
+        ::selection {
+            background: none;
+        }
+        
+        /*=== Navigation ===*/
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+        nav a.button {
+            position: absolute;
+            display: inline-block;
+            margin: .5rem;
+            padding: .5rem;
+
+            background: ghostwhite;
+
+            border: 1px solid #333;
+            border-radius: 5px;
+
+            -webkit-transition: all 500ms;
+            -moz-transition: all 500ms;
+            -ms-transition: all 500ms;
+            -o-transition: all 500ms;
+            transition: all 500ms;
+        }
+        nav a.button:hover {
+            color: white;
+            background: #333;
+
+            transform: scale(1.2);
+            margin: .8rem;
+        }
+        nav a.button.options {
+            right: 0;
+        }
+
+        /*=== Title ===*/
+        h1.title {
+            text-align: center;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /*=== Main Play Area ===*/
+        .grid {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 3.5rem);
+            
+            background: tomato;
+        }
+        .grid > div {
+            flex: 1;
+            border: 1px solid #333;
+        }
+
+        /*=== Current User's Grid ===*/
+        .user-grid-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .user-grid {
+            flex: 1;
+            display: grid;
+            max-width: 80%;
+            grid-template: repeat(2, 1fr) / repeat(3, 1fr);
+            padding: 1rem;
+        }
+
+        .user-grid .tile:hover {
+            background: #333;
+            box-shadow: 0 0 20px 4px #47FF63;
+            color: white;
+            cursor: pointer;
+        }
+        .user-grid .tile:active {
+            transform: scale(1.1);
+            background: mediumpurple;
+        }
+
+        /*=== Tile Group ===*/
+        .tile {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+
+            margin: 1rem;
+
+            border: 1px solid #333;
+            border-radius: 5px;
+
+            -webkit-transition: all 500ms;
+            -moz-transition: all 500ms;
+            -ms-transition: all 500ms;
+            -o-transition: all 500ms;
+            transition: all 500ms;
+        }
+        .tile > * {
+            margin-top: .5rem;
+            margin-bottom: .5rem;
+        }
+        .tile kbd {
+            font-size: 3rem;
+        }
+        .tile i {
+            font-size: 2rem;
+        }
+        .tile span {
+            font-size: .8rem;
+            color: #aeffa6;
+        }
+
+        /*=== Other User's Grid ===*/
+        .others-grid-container {
+            display: flex;
+            align-items: center;
+
+            background: cadetblue;
+        }
+        .others-grid-container .tile-wrap {
+            flex: 1;
+            height: 100%;
+            border: 1px solid #333;
+        }
+        .others-grid-container .tile {
+            margin: 0;
+            border: none;
+            max-height: 80%;
+
+            transform: translateY(75%);
+        }
+        
+        @media screen and (max-width: 600px) {
+            .grid {
+                height: auto;
+            }
+
+            .tile kbd {
+                font-size: 2rem;
+            }
+            .tile i {
+                font-size: 1.5rem;
+            }
+            .tile span {
+                font-size: .5rem;
+            }
+
+            .user-grid-container {
+                flex: .55 !important;
+            }
+            .user-grid {
+                grid-template: repeat(3, 1fr) / repeat(2, 1fr);
+            }
+
+            .others-grid-container {
+                flex: .45 !important;
+
+                flex-direction: column;
+            }
+            .others-grid-container .tile-wrap {
+                width: 100%;
+            }
+            .others-grid-container .tile {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" class="button back"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
+        <a href="/" class="button options">Options <i class="fa fa-gear" aria-hidden="true"></i></a>
+    </nav>
+    <h1 class="title">Jam Space</h1>
+    <div class="grid">
+        <div class="others-grid-container">
+            <div class="tile-wrap">
+                <div class="tile">
+                    <kbd>1</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Lorem.</span>
+                </div>
+            </div>
+            <div class="tile-wrap">
+                <div class="tile">
+                    <kbd>1</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Lorem.</span>
+                </div>
+            </div>
+            <div class="tile-wrap">
+                <div class="tile">
+                    <kbd>1</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Lorem.</span>
+                </div>
+            </div>
+        </div>
+        <div id="current-user-tile" class="user-grid-container">
+            <div class="user-grid">
+                <div class="tile">
+                    <kbd>1</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Lorem.</span>
+                </div>
+                <div class="tile">
+                    <kbd>2</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Omnis.</span>
+                </div>
+                <div class="tile">
+                    <kbd>3</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Nulla?</span>
+                </div>
+                <div class="tile">
+                    <kbd>4</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Vel.</span>
+                </div>
+                <div class="tile">
+                    <kbd>5</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Voluptas.</span>
+                </div>
+                <div class="tile">
+                    <kbd>6</kbd>
+                    <i class="fa fa-bomb"></i>
+                    <span>Repudiandae!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
